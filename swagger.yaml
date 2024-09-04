@@ -86,9 +86,17 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/conversion"
+                type: object
+                properties:
+                  conversions:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/conversion"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: "#/components/schemas/pagination"
 
   "/conversions/{id}":
     get:
@@ -151,18 +159,8 @@ paths:
           description: Success
           content:
             application/json:
-            schema:
-              type: object
-              properties:
-                conversions:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/conversion"
-                meta:
-                  type: object
-                  properties:
-                    pagination:
-                      $ref: "#/components/schemas/pagination"
+              schema:
+                $ref: "#/components/schemas/conversion"
         "403":
           description: Forbidden
 
