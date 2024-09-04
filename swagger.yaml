@@ -4,12 +4,6 @@ info:
 
   title: Affitch API
 
-  contact:
-    url: "https://affitch.com/contact"
-
-  x-logo:
-    url: "https://redocly.github.io/openapi-template/logo.png"
-
   description: |
     こちらはAffitchのREST APIに関する仕様書です。
 
@@ -20,7 +14,7 @@ info:
     APIを利用するにはAPIキーが必要です。APIキーはShopifyアプリトップページの「APIの利用 > APIキーの管理」から取得できます。すべてのAPIリクエストのヘッダー `x-api-key` にAPIキーを含めてください。
 
     ## レート制限
-    1ヶ月間に送信できるリクエストの総数は10,000件です。また同時に送信可能なリクエストの最大数は5件です。これらの上限の引き上げが必要な場合は、[お問い合わせ](https://affitch.com/contact) よりご連絡ください。
+    1ヶ月間に送信できるリクエストの総数は10,000件です。また同時に送信可能なリクエストの最大数は5件です。これらの上限の引き上げが必要な場合は、[お問い合わせ](https://affitch.com/contact)よりご連絡ください。
 
 externalDocs:
   description: アプリの利用マニュアル
@@ -80,12 +74,12 @@ paths:
                   conversions:
                     type: array
                     items:
-                      $ref: "#/components/schemas/conversion"
+                      $ref: "#/components/schemas/Conversion"
                   meta:
                     type: object
                     properties:
                       pagination:
-                        $ref: "#/components/schemas/pagination"
+                        $ref: "#/components/schemas/Pagination"
 
   "/conversions/{id}":
     get:
@@ -118,7 +112,7 @@ paths:
                 type: object
                 properties:
                   conversion:
-                    $ref: "#/components/schemas/conversion"
+                    $ref: "#/components/schemas/Conversion"
         "403":
           description: Forbidden
         "404":
@@ -155,7 +149,7 @@ paths:
                 type: object
                 properties:
                   conversion:
-                    $ref: "#/components/schemas/conversion"
+                    $ref: "#/components/schemas/Conversion"
         "403":
           description: Forbidden
 
@@ -203,7 +197,7 @@ paths:
                 type: object
                 properties:
                   conversion:
-                    $ref: "#/components/schemas/conversion"
+                    $ref: "#/components/schemas/Conversion"
         "403":
           description: Forbidden
         "404":
@@ -213,15 +207,7 @@ paths:
 
 components:
   schemas:
-    id:
-      description: ID
-      type: string
-      example: 01HRB68JC8185BJ6MPQMM71H9C
-    created_at:
-      description: 作成日時
-      type: string
-      example: 2024-01-01T00:00:00Z
-    pagination:
+    Pagination:
       type: object
       properties:
         page:
@@ -239,11 +225,13 @@ components:
         has_next:
           type: boolean
           example: true
-    conversion:
+    Conversion:
       type: object
       properties:
         id:
-          $ref: "#/components/schemas/id"
+          description: ID
+          type: string
+          example: 01HRB68JC8185BJ6MPQMM71H9C
         kind:
           description: 種類
           type: string
@@ -285,7 +273,9 @@ components:
           type: number
           example: 5916298510497
         created_at:
-          $ref: "#/components/schemas/created_at"
+          description: 作成日時
+          type: string
+          example: 2024-01-01T00:00:00Z
         affiliate_id:
           description: アフィリエイト参照ID
           type: string
