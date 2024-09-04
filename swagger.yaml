@@ -39,11 +39,11 @@ externalDocs:
 # A list of tags used by the definition with additional metadata.
 # The order of the tags can be used to reflect on their order by the parsing tools.
 tags:
-  - name: アフィリエイト
+  - name: Affiliate
     description: アフィリエイトのAPI
-  - name: コンバージョン
+  - name: Conversion
     description: コンバージョンのAPI
-  - name: 報酬支払
+  - name: Payout
     description: 報酬支払のAPI
 servers:
   - url: "https://api.affitch.com/v1"
@@ -54,14 +54,14 @@ paths:
   "/conversions/{id}":
     get:
       tags:
-        - コンバージョン
+        - Conversion
 
       summary: コンバージョン詳細
 
       description: |
-        コンバージョン詳細データの取得
+        コンバージョン1件のデータを取得します。
 
-      operationId: getConversionById
+      operationId: getConversion
 
       parameters:
         - name: id
@@ -88,12 +88,12 @@ paths:
   "/conversions/{id}/approve":
     post:
       tags:
-        - コンバージョン
+        - Conversion
 
       summary: コンバージョン承認
 
       description: |
-        コンバージョンの承認
+        コンバージョン1件のステータスを「承認」に更新します。
 
       operationId: approveConversion
 
@@ -124,12 +124,12 @@ paths:
   "/conversions/{id}/reject":
     post:
       tags:
-        - コンバージョン
+        - Conversion
 
       summary: コンバージョン拒否
 
       description: |
-        コンバージョンの拒否
+        コンバージョン1件のステータスを「拒否」に更新します。
 
       operationId: rejectConversion
 
@@ -143,6 +143,19 @@ paths:
 
       security:
         - api_key: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversion:
+                  type: object
+                  properties:
+                    comment:
+                      type: string
+                      description: 承認拒否の理由（アフィリエイトには表示されません。）
       responses:
         "200":
           description: Success
