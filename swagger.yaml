@@ -48,9 +48,48 @@ tags:
 servers:
   - url: "https://api.affitch.com/v1"
 
-# Holds the relative paths to the individual endpoints. The path is appended to the
-# basePath in order to construct the full URL.
 paths:
+  "/conversions":
+    get:
+      tags:
+        - Conversion
+
+      summary: コンバージョン一覧
+
+      description: |
+        コンバージョンの一覧を取得します。
+
+      operationId: listConversions
+
+      parameters:
+        - name: page
+          in: query
+          description: ページ番号
+          required: false
+          schema:
+            type: number
+        - name: page_size
+          in: query
+          description: 1ページあたりの件数
+          required: false
+          schema:
+            type: number
+            maximum: 100
+            default: 20
+
+      security:
+        - api_key: []
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/conversion"
+
   "/conversions/{id}":
     get:
       tags:
@@ -112,14 +151,20 @@ paths:
           description: Success
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/conversion"
+            schema:
+              type: object
+              properties:
+                conversions:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/conversion"
+                meta:
+                  type: object
+                  properties:
+                    pagination:
+                      $ref: "#/components/schemas/pagination"
         "403":
           description: Forbidden
-        "404":
-          description: Conversion not found
-        "422":
-          description: Status must be PENDING
 
   "/conversions/{id}/reject":
     post:
@@ -180,6 +225,24 @@ components:
       description: 作成日時
       type: string
       example: 2024-01-01T00:00:00Z
+    pagination:
+      type: object
+      properties:
+        page:
+          type: number
+          example: 1
+        total_pages:
+          type: number
+          example: 10
+        total_count:
+          type: number
+          example: 100
+        has_previous:
+          type: boolean
+          example: true
+        has_next:
+          type: boolean
+          example: true
     conversion:
       type: object
       properties:
