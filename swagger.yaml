@@ -85,6 +85,78 @@ paths:
         "404":
           description: Conversion not found
 
+  "/conversions/{id}/approve":
+    post:
+      tags:
+        - コンバージョン
+
+      summary: コンバージョン承認
+
+      description: |
+        コンバージョンの承認
+
+      operationId: approveConversion
+
+      parameters:
+        - name: id
+          in: path
+          description: コンバージョンID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/conversion"
+        "403":
+          description: Forbidden
+        "404":
+          description: Conversion not found
+        "422":
+          description: Status must be PENDING
+
+  "/conversions/{id}/reject":
+    post:
+      tags:
+        - コンバージョン
+
+      summary: コンバージョン拒否
+
+      description: |
+        コンバージョンの拒否
+
+      operationId: rejectConversion
+
+      parameters:
+        - name: id
+          in: path
+          description: コンバージョンID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/conversion"
+        "403":
+          description: Forbidden
+        "404":
+          description: Conversion not found
+        "422":
+          description: Status must be PENDING
+
 components:
   schemas:
     id:
