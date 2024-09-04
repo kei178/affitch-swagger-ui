@@ -94,7 +94,6 @@ components:
     created_at:
       description: 作成日時
       type: string
-      format: date-time
       example: 2024-01-01T00:00:00Z
     conversion:
       type: object
@@ -104,10 +103,18 @@ components:
         kind:
           description: 種類
           type: string
+          enum:
+            - CLICK
+            - DISCOUNT_CODE
+            - RECURRING
           example: CLICK
         status:
           description: ステータス
           type: string
+          enum:
+            - PENDING
+            - APPROVED
+            - REJECTED
           example: PENDING
         amount:
           description: 注文金額
