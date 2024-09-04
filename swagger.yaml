@@ -115,7 +115,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/conversion"
+                type: object
+                properties:
+                  conversion:
+                    $ref: "#/components/schemas/conversion"
         "403":
           description: Forbidden
         "404":
@@ -149,7 +152,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/conversion"
+                type: object
+                properties:
+                  conversion:
+                    $ref: "#/components/schemas/conversion"
         "403":
           description: Forbidden
 
@@ -194,7 +200,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/conversion"
+                type: object
+                properties:
+                  conversion:
+                    $ref: "#/components/schemas/conversion"
         "403":
           description: Forbidden
         "404":
