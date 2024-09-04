@@ -7,16 +7,12 @@ info:
   # It can be any string but it is better to use semantic versioning: http://semver.org/
   # Warning: OpenAPI requires the version to be a string, but without quotation marks YAML can recognize it as a number.
 
-  title: Example.com # Replace with your API title
+  title: Affitch API # Replace with your API title
   # Keep it simple. Don't add "API" or version at the end of the string.
 
-  termsOfService: "https://example.com/terms/" # [Optional] Replace with an URL to your ToS
   contact:
-    email: contact@example.com # [Optional] Replace with your contact email
-    url: "http://example.com/contact" # [Optional] Replace with link to your contact form
-  license:
-    name: Apache 2.0
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    url: "https://affitch.com/contact" # [Optional] Replace with link to your contact form
+
   x-logo:
     url: "https://redocly.github.io/openapi-template/logo.png"
 
@@ -43,206 +39,112 @@ externalDocs:
 # A list of tags used by the definition with additional metadata.
 # The order of the tags can be used to reflect on their order by the parsing tools.
 tags:
-  - name: Echo
-    description: Example echo operations
-  - name: User
-    description: Operations about user
+  - name: アフィリエイト
+    description: アフィリエイトのAPI
+  - name: コンバージョン
+    description: コンバージョンのAPI
+  - name: 報酬支払
+    description: 報酬支払のAPI
 servers:
-  - url: "http://example.com/api/v1"
-  - url: "https://example.com/api/v1"
+  - url: "https://api.affitch.com/v1"
 
 # Holds the relative paths to the individual endpoints. The path is appended to the
 # basePath in order to construct the full URL.
 paths:
-  "/users/{username}": # path parameter in curly braces
-    # parameters list that are used with each operation for this path
-    parameters:
-      - name: pretty_print
-        in: query
-        description: Pretty print response
-        schema:
-          type: boolean
-    get: # documentation for GET operation for this path
+  "/conversions/{id}":
+    get:
       tags:
-        - User
+        - コンバージョン
 
-      # summary is up to 120 symbold but we recommend to be shortest as possible
-      summary: Get user by user name
+      summary: コンバージョン詳細
 
-      # you can use GFM in operation description too: https://guides.github.com/features/mastering-markdown
       description: |
-        Some description of the operation. 
-        You can use `markdown` here.
+        コンバージョン詳細データの取得
 
-      # operationId should be unique across the whole specification
-      operationId: getUserByName
+      operationId: getConversionById
 
-      # list of parameters for the operation
       parameters:
-        - name: username
+        - name: id
           in: path
-          description: The name that needs to be fetched
+          description: コンバージョンID
           required: true
           schema:
             type: string
-        - name: with_email
-          in: query
-          description: Filter users without email
-          schema:
-            type: boolean
 
-      # security schemas applied to this operation
       security:
-        - main_auth:
-            - "read:users" # for oauth2 provide list of scopes here
         - api_key: []
-      responses: # list of responses
+      responses:
         "200":
           description: Success
           content:
-            application/json: # operation response mime type
-              schema: # response schema can be specified for each response
-                $ref: "#/components/schemas/User"
-              example: # response example
-                username: user1
-                email: user@example.com
+            application/json:
+              schema:
+                $ref: "#/components/schemas/conversion"
         "403":
           description: Forbidden
         "404":
-          description: User not found
-    # documentation for PUT operation for this path
-    put:
-      tags:
-        - User
-      summary: Updated user
-      description: This can only be done by the logged in user.
-      operationId: updateUser
-      parameters:
-        - name: username
-          in: path
-          description: The name that needs to be updated
-          required: true
-          schema:
-            type: string
-      security:
-        - main_auth:
-            - "write:users"
-      responses:
-        "200":
-          description: OK
-        "400":
-          description: Invalid user supplied
-        "404":
-          description: User not found
-      # request body documentation
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/User"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/User"
-        description: Updated user object
-        required: true
-  /echo: # path parameter in curly braces
-    post: # documentation for POST operation for this path
-      tags:
-        - Echo
-      summary: Echo test
-      description: Receive the exact message you've sent
-      operationId: echo
-      security:
-        - api_key: []
-        - basic_auth: []
-      responses:
-        "200":
-          description: OK
-          # document headers for this response
-          headers:
-            X-Rate-Limit: # Header name
-              description: calls per hour allowed by the user
-              schema: # Header schema
-                type: integer
-                format: int32
-            X-Expires-After:
-              $ref: "#/components/headers/ExpiresAfter"
-          content:
-            application/json:
-              schema:
-                type: string
-              examples:
-                response:
-                  value: Hello world!
-            application/xml:
-              schema:
-                type: string
-            text/csv:
-              schema:
-                type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: string
-              example: Hello world!
-          application/xml:
-            schema:
-              type: string
-              example: Hello world!
-        description: Echo payload
-        required: true
+          description: Conversion not found
 
-# An object to hold reusable parts that can be used across the definition
 components:
   schemas:
-    Email:
-      description: User email address
+    id:
+      description: ID
       type: string
-      format: test
-      example: john.smith@example.com
-    User:
+      example: 01HRB68JC8185BJ6MPQMM71H9C
+    created_at:
+      description: 作成日時
+      type: string
+      format: date-time
+      example: 2024-01-01T00:00:00Z
+    conversion:
       type: object
       properties:
-        username:
-          description: User supplied username
+        id:
+          $ref: "#/components/schemas/id"
+        kind:
+          description: 種類
           type: string
-          minLength: 4
-          example: John78
-        firstName:
-          description: User first name
+          example: CLICK
+        status:
+          description: ステータス
           type: string
-          minLength: 1
-          example: John
-        lastName:
-          description: User last name
+          example: PENDING
+        amount:
+          description: 注文金額
+          type: number
+          example: 10000
+        commission:
+          description: 報酬金額
+          type: number
+          example: 1000
+        commission_rate:
+          description: 報酬レート(%)
+          type: number
+          example: 10.0
+        comment:
+          description: 承認拒否の理由
           type: string
-          minLength: 1
-          example: Smith
-        email:
-          $ref: "#/components/schemas/Email"
-  headers:
-    ExpiresAfter:
-      description: date in UTC when token expires
-      schema:
-        type: string
-        format: date-time
-  # Security scheme definitions that can be used across the definition.
+          example: 返金注文（自動拒否）
+        order_number:
+          description: Shopify 注文番号
+          type: number
+          example: 1001
+        order_id:
+          description: Shopify 注文ID
+          type: number
+          example: 5916298510497
+        created_at:
+          $ref: "#/components/schemas/created_at"
+        affiliate_id:
+          description: アフィリエイト参照ID
+          type: string
+          example: 01HRB7TCSJNCGZKDCGY1G2R2JP
+        payout_id:
+          description: 報酬支払参照ID
+          type: string
+          example: 01J48WN09KC6PT954DMMVN9707
   securitySchemes:
-    main_auth: # security definition name (you can name it as you want)
-      # the following options are specific to oauth2 type
-      type: oauth2 # authorization type, one of: oauth2, apiKey, http
-      flows:
-        implicit:
-          authorizationUrl: "http://example.com/api/oauth/dialog"
-          scopes:
-            "read:users": read users info
-            "write:users": modify or remove users
-    api_key: # security definition name (you can name it as you want)
+    api_key:
       type: apiKey
-      # The following options are specific to apiKey type
-      in: header # Where API key will be passed: header or query
-      name: api_key # API key parameter name
-    basic_auth: # security definition name (you can name it as you want)
-      type: http
-      scheme: basic
+      in: header
+      name: x_api_key
