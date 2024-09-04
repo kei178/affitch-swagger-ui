@@ -68,14 +68,15 @@ paths:
           required: false
           schema:
             type: number
+            default: 1
         - name: page_size
           in: query
           description: 1ページあたりの件数
           required: false
           schema:
             type: number
-            maximum: 100
             default: 20
+            maximum: 100
 
       security:
         - api_key: []
