@@ -1,43 +1,31 @@
-# This is an **example** API to demonstrate features of OpenAPI specification.
-# It doesn't cover all OpenAPI features. For more full example check out: https://github.com/APIs-guru/petstore_extended
-
 openapi: 3.0.2
 info:
-  version: "1.0.0" # Your API version
-  # It can be any string but it is better to use semantic versioning: http://semver.org/
-  # Warning: OpenAPI requires the version to be a string, but without quotation marks YAML can recognize it as a number.
+  version: "1.0.0"
 
-  title: Affitch API # Replace with your API title
-  # Keep it simple. Don't add "API" or version at the end of the string.
+  title: Affitch API
 
   contact:
-    url: "https://affitch.com/contact" # [Optional] Replace with link to your contact form
+    url: "https://affitch.com/contact"
 
   x-logo:
     url: "https://redocly.github.io/openapi-template/logo.png"
 
-  # Describe your API here, you can use GFM (https://guides.github.com/features/mastering-markdown) here
   description: |
-    This is an **example** API to demonstrate features of OpenAPI specification
+    **Affitch**のREST APIに関する仕様書です。
+
     # Introduction
-    This API definition is intended to to be a good starting point for describing your API in 
-    [OpenAPI/Swagger format](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md).
-    It also demonstrates features of [create-openapi-repo](https://github.com/Redocly/create-openapi-repo) tool and 
-    [Redoc](https://github.com/Redocly/Redoc) documentation engine. So beyond the standard OpenAPI syntax we use a few 
-    [vendor extensions](https://github.com/Redocly/Redoc/blob/master/docs/redoc-vendor-extensions.md).
+    AffitchではPremiumプラン向けにAPIを提供しています。APIを活用することで自社の運用方法に最適化された自動化を構築することができます。
 
-    # OpenAPI Specification
-    The goal of The OpenAPI Specification is to define a standard, language-agnostic interface to REST APIs which
-    allows both humans and computers to discover and understand the capabilities of the service without access to source
-    code, documentation, or through network traffic inspection. When properly defined via OpenAPI, a consumer can 
-    understand and interact with the remote service with a minimal amount of implementation logic. Similar to what
-    interfaces have done for lower-level programming, OpenAPI removes the guesswork in calling the service.
+    # Authentication
+    APIを利用するにはAPIキーが必要です。APIキーはShopifyアプリトップページの「APIの利用 > APIキーの管理」から取得できます。すべてのAPIリクエストのヘッダー `x-api-key` にAPIキーを含めてください。
+
+    # Rate limit
+    1ヶ月間に送信できるリクエストの総数は10,000件です。また同時に送信可能なリクエストの最大数は5件です。これらの上限の引き上げが必要な場合は、[お問い合わせ](https://affitch.com/contact) よりご連絡ください。
+
 externalDocs:
-  description: Find out how to create a GitHub repo for your OpenAPI definition.
-  url: "https://github.com/Rebilly/generator-openapi-repo"
+  description: アプリの利用マニュアル
+  url: "https://affitch.com/docs"
 
-# A list of tags used by the definition with additional metadata.
-# The order of the tags can be used to reflect on their order by the parsing tools.
 tags:
   - name: Affiliate
     description: アフィリエイトのAPI
@@ -301,4 +289,4 @@ components:
     api_key:
       type: apiKey
       in: header
-      name: x_api_key
+      name: x-api-key
