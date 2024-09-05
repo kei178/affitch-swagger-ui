@@ -31,6 +31,159 @@ servers:
   - url: "https://api.affitch.com/v1"
 
 paths:
+  "/affiliates":
+    get:
+      tags:
+        - Affiliate
+
+      summary: アフィリエイト一覧
+
+      description: |
+        アフィリエイトの一覧を取得します。
+
+      operationId: listAffiliates
+
+      parameters:
+        - name: page
+          in: query
+          description: ページ番号
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: page_size
+          in: query
+          description: 1ページあたりの件数
+          required: false
+          schema:
+            type: number
+            default: 20
+            maximum: 100
+
+      security:
+        - api_key: []
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliates:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Affiliate"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: "#/components/schemas/Pagination"
+
+  "/affiliates/{id}":
+    get:
+      tags:
+        - Affiliate
+
+      summary: アフィリエイト詳細
+
+      description: |
+        アフィリエイト1件のデータを取得します。
+
+      operationId: getAffiliate
+
+      parameters:
+        - name: id
+          in: path
+          description: アフィリエイトID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliate:
+                    $ref: "#/components/schemas/Affiliate"
+        "403":
+          description: Forbidden
+        "404":
+          description: Affiliate not found
+
+
+  "/affiliates/{id}":
+    put:
+      tags:
+        - Affiliate
+
+      summary: アフィリエイト更新
+
+      description: |
+        アフィリエイト1件のデータを更新します。
+
+      operationId: updateAffiliate
+
+      parameters:
+        - name: id
+          in: path
+          description: アフィリエイトID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                conversion:
+                  type: object
+                  properties:
+                    commission_rate:
+                      type: number
+                      description: 個別報酬レート(%)
+                      example: 10.0
+                    use_default_recurring_commission_rate:
+                      type: boolean
+                      description: ストアのデフォルトの継続課金報酬レートを適用するかどうか。この設定が有効な場合、継続コンバージョン個別報酬レートは適用されません。
+                      example: true
+                    recurring_commission_rate:
+                      type: number
+                      description: 継続コンバージョン個別報酬レート(%)
+                      example: 10.0
+                    recurring_conversion_allowed:
+                      type: string
+                      description: 継続コンバージョンの計測を許可するかどうか。この設定はストアで「許可したアフィリエイトのみに適用」が有効な場合のみ適用されます。
+                      example: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliate:
+                    $ref: "#/components/schemas/Affiliate"
+        "403":
+          description: Forbidden
+        "404":
+          description: Affiliate not found
+        "422":
+          description: Unprocessable entity
+
   "/conversions":
     get:
       tags:
@@ -302,7 +455,7 @@ paths:
       description: |
         報酬支払のステータスを「支払済」に更新します。
 
-      operationId: payoutMarkAsPaid
+      operationId: markPayoutAsPaid
 
       parameters:
         - name: id
@@ -341,7 +494,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Conversion not found
+          description: Payout not found
         "422":
           description: Paid on is invalid
 
@@ -354,6 +507,48 @@ components:
           description: ID
           type: string
           example: 01HRB7TCSJNCGZKDCGY1G2R2JP
+        affiliate_id:
+          type: string
+          description: アフィリエイトID。コンバージョン計測のためにアフィリエイトごと発行される固有の値。
+          example: GQKCY6Z6CDCZ
+        commission_rate:
+          type: number
+          description: 報酬レート(%)
+          example: 10.0
+        recurring_commission_rate:
+          type: number
+          description: 継続コンバージョン報酬レート(%)
+          example: 10.0
+        use_default_recurring_commission_rate:
+          type: boolean
+          description: ストアのデフォルトの継続課金報酬レートを適用するかどうか。この設定が有効な場合、継続コンバージョン個別報酬レートは適用されません。
+          example: true
+        recurring_conversion_allowed:
+          type: boolean
+          description: 継続コンバージョンの計測を許可するかどうか。この設定はストアで「許可したアフィリエイトのみに適用」が有効な場合のみ適用されます。
+          example: true
+        is_active:
+          type: boolean
+          description: ステータスが有効かどうか
+          example: true
+        inactive_type:
+          type: string
+          description: ステータスが無効の場合の種別
+          example: 
+        inactive_at:
+          type: string
+          description: ステータスが無効になった日時
+          enum:
+            - SHOP_UNINSTALLED
+            - USER_DELETED
+            - MANUAL_UPDATE
+          example: 2024-01-01T00:00:00Z
+        created_at:
+          type: string
+          description: 作成日時
+          example: 2024-01-01T00:00:00Z
+        user:
+          $ref: "#/components/schemas/User"
     Conversion:
       type: object
       properties:
@@ -362,7 +557,7 @@ components:
           type: string
           example: 01HRB68JC8185BJ6MPQMM71H9C
         kind:
-          description: 種類
+          description: 種別
           type: string
           enum:
             - CLICK
@@ -478,10 +673,68 @@ components:
     User:
       type: object
       properties:
-        id:
-          description: ID
+        email:
           type: string
-          example: 01HRB7TCSJNCGZKDCGY1G2R2JP
+          description: メールアドレス
+          example: test@example.com
+        kind:
+          type: string
+          description: 種別
+          enum:
+            - INDIVIDUAL
+            - COMPANY
+          example: INDIVIDUAL
+        jp_tax_invoice_registered:
+          type: boolean
+          description: 適格請求書発行事業者登録有無
+          example: true
+        jp_tax_registration_num:
+          type: string
+          description: 適格請求書発行事業者登録番号
+          example: 0123456789012
+        jp_tax_registration_name:
+          type: string
+          description: 適格請求書発行事業者登録事業者名
+          example: 日本株式会社
+        name:
+          type: string
+          description: 名前
+          example: 日本 太郎
+        extra_info:
+          type: string
+          description: 備考
+          example: その他の情報
+        bank_code:
+          type: string
+          description: 銀行コード
+          example: 0001
+        bank_name:
+          type: string
+          description: 銀行名
+          example: みずほ
+        bank_branch_code:
+          type: string
+          description: 銀行支店コード
+          example: 210
+        bank_branch_name:
+          type: string
+          description: 銀行支店名
+          example: 渋谷
+        bank_account_type:
+          type: string
+          description: 口座種別
+          enum:
+            - SAVINGS
+            - CHECKING
+          example: SAVINGS
+        bank_account_number:
+          type: string
+          description: 口座番号
+          example: 1234567890
+        bank_account_name:
+          type: string
+          description: 口座名義
+          example: 日本 太郎
 
   securitySchemes:
     api_key:
