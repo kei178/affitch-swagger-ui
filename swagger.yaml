@@ -118,8 +118,6 @@ paths:
         "404":
           description: Affiliate not found
 
-
-  "/affiliates/{id}":
     put:
       tags:
         - Affiliate
@@ -534,7 +532,7 @@ components:
         inactive_type:
           type: string
           description: ステータスが無効の場合の種別
-          example: 
+          example:
         inactive_at:
           type: string
           description: ステータスが無効になった日時
