@@ -255,6 +255,96 @@ paths:
                     pagination:
                       $ref: "#/components/schemas/Pagination"
 
+  "/payouts/{id}":
+    get:
+      tags:
+        - Payout
+
+      summary: 報酬支払詳細
+
+      description: |
+        報酬支払1件のデータを取得します。
+
+      operationId: getPayout
+
+      parameters:
+        - name: id
+          in: path
+          description: 報酬支払ID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payout:
+                    $ref: "#/components/schemas/PayoutWithConversions"
+        "403":
+          description: Forbidden
+        "404":
+          description: Payout not found
+
+  "/payouts/{id}/mark_as_paid":
+    post:
+      tags:
+        - Payout
+
+      summary: 報酬支払の支払登録
+
+      description: |
+        報酬支払のステータスを「支払済」に更新します。
+
+      operationId: payoutMarkAsPaid
+
+      parameters:
+        - name: id
+          in: path
+          description: 報酬支払ID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payout:
+                  type: object
+                  properties:
+                    paid_on:
+                      type: string
+                      description: 支払日
+                      example: 2024-01-01
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payout:
+                    $ref: "#/components/schemas/Payout"
+        "403":
+          description: Forbidden
+        "404":
+          description: Conversion not found
+        "422":
+          description: Paid on is invalid
+
 components:
   schemas:
     Pagination:
