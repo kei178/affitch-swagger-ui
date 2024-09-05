@@ -205,6 +205,56 @@ paths:
         "422":
           description: Status must be PENDING
 
+"/payouts":
+  get:
+    tags:
+      - Payout
+
+    summary: 報酬支払一覧
+
+    description: |
+      報酬支払の一覧を取得します。
+
+    operationId: listPayouts
+
+    parameters:
+      - name: page
+        in: query
+        description: ページ番号
+        required: false
+        schema:
+          type: number
+          default: 1
+      - name: page_size
+        in: query
+        description: 1ページあたりの件数
+        required: false
+        schema:
+          type: number
+          default: 20
+          maximum: 100
+
+    security:
+      - api_key: []
+
+    responses:
+      "200":
+        description: Success
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payouts:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Payout"
+                meta:
+                  type: object
+                  properties:
+                    pagination:
+                      $ref: "#/components/schemas/Pagination"
+
 components:
   schemas:
     Pagination:
@@ -284,6 +334,51 @@ components:
           description: 報酬支払参照ID
           type: string
           example: 01J48WN09KC6PT954DMMVN9707
+    Payout:
+      type: object
+      properties:
+        id:
+          description: ID
+          type: string
+          example: 01HRB68JC8185BJ6MPQMM71H9C
+        status:
+          description: ステータス
+          type: string
+          enum:
+            - PENDING
+            - PAID
+            - REJECTED
+          example: PENDING
+        amount:
+          description: 金額
+          type: number
+          example: 10000
+        due_on:
+          description: 支払期日
+          type: string
+          example: 2024-01-01
+        paid_on:
+          description: 支払日
+          type: string
+          example: 2024-01-01
+        created_at:
+          description: 作成日時
+          type: string
+          example: 2024-01-01T00:00:00Z
+        affiliate_id:
+          description: アフィリエイト参照ID
+          type: string
+          example: 01HRB7TCSJNCGZKDCGY1G2R2JP
+    PayoutWithConversions:
+      allOf:
+        - $ref: "#/components/schemas/Payout"
+        - type: object
+          properties:
+            conversions:
+              type: array
+              items:
+                $ref: "#/components/schemas/Conversion"
+
   securitySchemes:
     api_key:
       type: apiKey
