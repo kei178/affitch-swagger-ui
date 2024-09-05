@@ -205,55 +205,55 @@ paths:
         "422":
           description: Status must be PENDING
 
-"/payouts":
-  get:
-    tags:
-      - Payout
+  "/payouts":
+    get:
+      tags:
+        - Payout
 
-    summary: 報酬支払一覧
+      summary: 報酬支払一覧
 
-    description: |
-      報酬支払の一覧を取得します。
+      description: |
+        報酬支払の一覧を取得します。
 
-    operationId: listPayouts
+      operationId: listPayouts
 
-    parameters:
-      - name: page
-        in: query
-        description: ページ番号
-        required: false
-        schema:
-          type: number
-          default: 1
-      - name: page_size
-        in: query
-        description: 1ページあたりの件数
-        required: false
-        schema:
-          type: number
-          default: 20
-          maximum: 100
+      parameters:
+        - name: page
+          in: query
+          description: ページ番号
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: page_size
+          in: query
+          description: 1ページあたりの件数
+          required: false
+          schema:
+            type: number
+            default: 20
+            maximum: 100
 
-    security:
-      - api_key: []
+      security:
+        - api_key: []
 
-    responses:
-      "200":
-        description: Success
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                payouts:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Payout"
-                meta:
-                  type: object
-                  properties:
-                    pagination:
-                      $ref: "#/components/schemas/Pagination"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  payouts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Payout"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: "#/components/schemas/Pagination"
 
   "/payouts/{id}":
     get:
@@ -347,24 +347,13 @@ paths:
 
 components:
   schemas:
-    Pagination:
+    Affiliate:
       type: object
       properties:
-        page:
-          type: number
-          example: 1
-        total_pages:
-          type: number
-          example: 10
-        total_count:
-          type: number
-          example: 100
-        has_previous:
-          type: boolean
-          example: true
-        has_next:
-          type: boolean
-          example: true
+        id:
+          description: ID
+          type: string
+          example: 01HRB7TCSJNCGZKDCGY1G2R2JP
     Conversion:
       type: object
       properties:
@@ -424,6 +413,24 @@ components:
           description: 報酬支払参照ID
           type: string
           example: 01J48WN09KC6PT954DMMVN9707
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: number
+          example: 1
+        total_pages:
+          type: number
+          example: 10
+        total_count:
+          type: number
+          example: 100
+        has_previous:
+          type: boolean
+          example: true
+        has_next:
+          type: boolean
+          example: true
     Payout:
       type: object
       properties:
@@ -468,6 +475,13 @@ components:
               type: array
               items:
                 $ref: "#/components/schemas/Conversion"
+    User:
+      type: object
+      properties:
+        id:
+          description: ID
+          type: string
+          example: 01HRB7TCSJNCGZKDCGY1G2R2JP
 
   securitySchemes:
     api_key:
