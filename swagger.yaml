@@ -146,7 +146,7 @@ paths:
             schema:
               type: object
               properties:
-                conversion:
+                affiliate:
                   type: object
                   properties:
                     commission_rate:
