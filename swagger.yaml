@@ -96,7 +96,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: アフィリエイトID
+          description: ID
           required: true
           schema:
             type: string
@@ -132,7 +132,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: アフィリエイトID
+          description: ID
           required: true
           schema:
             type: string
@@ -247,7 +247,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: コンバージョンID
+          description: ID
           required: true
           schema:
             type: string
@@ -284,7 +284,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: コンバージョンID
+          description: ID
           required: true
           schema:
             type: string
@@ -319,7 +319,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: コンバージョンID
+          description: ID
           required: true
           schema:
             type: string
@@ -421,7 +421,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: 報酬支払ID
+          description: ID
           required: true
           schema:
             type: string
@@ -458,7 +458,7 @@ paths:
       parameters:
         - name: id
           in: path
-          description: 報酬支払ID
+          description: ID
           required: true
           schema:
             type: string
