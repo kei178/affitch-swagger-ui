@@ -23,6 +23,8 @@ externalDocs:
 tags:
   - name: Affiliate
     description: アフィリエイトのAPI
+  - name: AffiliateDiscountCode
+    description: アフィリエイトクーポンコードのAPI
   - name: Conversion
     description: コンバージョンのAPI
   - name: Payout
