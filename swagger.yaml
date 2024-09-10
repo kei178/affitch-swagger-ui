@@ -116,7 +116,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Affiliate not found
+          description: Record not found
 
     put:
       tags:
@@ -178,9 +178,178 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Affiliate not found
+          description: Record not found
         "422":
           description: Unprocessable entity
+
+  "/affiliate_discount_codes":
+    get:
+      tags:
+        - AffiliateDiscountCode
+
+      summary: アフィリエイトクーポンコード一覧
+
+      description: |
+        アフィリエイトクーポンコードの一覧を取得します。
+
+      operationId: listAffiliateDiscountCodes
+
+      parameters:
+        - name: page
+          in: query
+          description: ページ番号
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: page_size
+          in: query
+          description: 1ページあたりの件数
+          required: false
+          schema:
+            type: number
+            default: 20
+            maximum: 100
+
+      security:
+        - api_key: []
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliate_discount_codes:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AffiliateDiscountCode"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: "#/components/schemas/Pagination"
+    post:
+      tags:
+        - AffiliateDiscountCode
+
+      summary: アフィリエイトクーポンコード作成（カスタムコードのみ）
+
+      description: |
+        アフィリエイトクーポンコードを作成します（カスタムコードのみ）。
+
+      operationId: createAffiliateDiscountCode
+
+      security:
+        - api_key: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                affiliate_discount_code:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                      description: クーポンコード
+                      example: 10PERCENTOFF
+                    affiliate_id:
+                      type: string
+                      description: アフィリエイト参照ID
+                      example: 01HRB7TCSJNCGZKDCGY1G2R2JP
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliate_discount_code:
+                    $ref: "#/components/schemas/AffiliateDiscountCode"
+        "403":
+          description: Forbidden
+        "404":
+          description: Record not found
+        "422":
+          description: Code 10PERCENTOFF already exists
+
+  "/affiliate_discount_codes/{id}":
+    get:
+      tags:
+        - AffiliateDiscountCode
+
+      summary: アフィリエイトクーポンコード詳細
+
+      description: |
+        アフィリエイトクーポンコード1件のデータを取得します。
+
+      operationId: getAffiliateDiscountCode
+
+      parameters:
+        - name: id
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliate_discount_code:
+                    $ref: "#/components/schemas/AffiliateDiscountCode"
+        "403":
+          description: Forbidden
+        "404":
+          description: Record not found
+
+    delete:
+      tags:
+        - AffiliateDiscountCode
+
+      summary: アフィリエイトクーポンコード削除（カスタムコードのみ）
+
+      description: |
+        アフィリエイトクーポンコードを削除します（カスタムコードのみ）。
+
+      operationId: deleteAffiliateDiscountCode
+
+      parameters:
+        - name: id
+          in: path
+          description: ID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: Forbidden
+        "404":
+          description: Record not found
+        "422":
+          description: Default code cannot be deleted
 
   "/conversions":
     get:
@@ -267,7 +436,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Conversion not found
+          description: Record not found
 
   "/conversions/{id}/approve":
     post:
@@ -352,7 +521,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Conversion not found
+          description: Record not found
         "422":
           description: Status must be PENDING
 
@@ -441,7 +610,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Payout not found
+          description: Record not found
 
   "/payouts/{id}/mark_as_paid":
     post:
@@ -492,7 +661,7 @@ paths:
         "403":
           description: Forbidden
         "404":
-          description: Payout not found
+          description: Record not found
         "422":
           description: Paid on is invalid
 
@@ -547,6 +716,35 @@ components:
           example: 2024-01-01T00:00:00Z
         user:
           $ref: "#/components/schemas/User"
+    AffiliateDiscountCode:
+      type: object
+      properties:
+        id:
+          description: ID
+          type: string
+          example: 01HRB68JC8185BJ6MPQMM71H9C
+        code:
+          description: クーポンコード
+          type: string
+          example: 10PERCENTOFF
+        kind:
+          description: 種別
+          type: string
+          enum:
+            - DEFAULT
+            - CUSTOM
+        conversions_count:
+          description: コンバージョン数
+          type: number
+          example: 10
+        created_at:
+          description: 作成日時
+          type: string
+          example: 2024-01-01T00:00:00Z
+        affiliate_id:
+          description: アフィリエイト参照ID
+          type: string
+          example: 01HRB7TCSJNCGZKDCGY1G2R2JP
     Conversion:
       type: object
       properties:
