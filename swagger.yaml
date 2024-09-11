@@ -51,6 +51,17 @@ paths:
       operationId: listAffiliates
 
       parameters:
+        - name: statuses
+          in: query
+          description: ステータス
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - ACTIVE
+                - INACTIVE
         - name: page
           in: query
           description: ページ番号
@@ -371,6 +382,18 @@ paths:
       operationId: listConversions
 
       parameters:
+        - name: statuses
+          in: query
+          description: ステータス
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - PENDING
+                - APPROVED
+                - REJECTED
         - name: page
           in: query
           description: ページ番号
@@ -545,6 +568,17 @@ paths:
       operationId: listPayouts
 
       parameters:
+        - name: statuses
+          in: query
+          description: ステータス
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - PENDING
+                - PAID
         - name: page
           in: query
           description: ページ番号
