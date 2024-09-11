@@ -701,10 +701,13 @@ components:
           type: boolean
           description: 継続コンバージョンの計測を許可するかどうか。この設定はストアで「許可したアフィリエイトのみに適用」が有効な場合のみ適用されます。
           example: true
-        is_active:
-          type: boolean
-          description: ステータスが有効かどうか
-          example: true
+        status:
+          type: string
+          description: ステータス
+          enum:
+            - ACTIVE
+            - INACTIVE
+          example: ACTIVE
         inactive_type:
           type: string
           description: ステータスが無効の場合の種別
