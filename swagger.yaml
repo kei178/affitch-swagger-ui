@@ -718,7 +718,7 @@ components:
           example: 01HRB7TCSJNCGZKDCGY1G2R2JP
         code:
           type: string
-          description: アフィリエイトコード。コンバージョン計測のためにアフィリエイトごとに発行される固有の値。
+          description: アフィリエイトID。コンバージョン計測のためにアフィリエイトごとに発行される固有の値。
           example: GQKCY6Z6CDCZ
         commission_rate:
           type: number
