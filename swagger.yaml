@@ -736,6 +736,14 @@ components:
           type: boolean
           description: 継続コンバージョンの計測を許可するかどうか。この設定はストアで「許可したアフィリエイトのみに適用」が有効な場合のみ適用されます。
           example: true
+        order_tag_enabled:
+          type: boolean
+          description: 個別注文タグを追加するかどうか。この設定はストアで「注文タグを追加する」が有効になっている場合のみ適用されます。
+          example: true
+        order_tag:
+          type: string
+          description: 当アフィリエイト経由の注文のみに適用される個別タグ名。
+          example: グループA
         status:
           type: string
           description: ステータス
