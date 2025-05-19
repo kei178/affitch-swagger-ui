@@ -645,7 +645,7 @@ paths:
           schema:
             type: string
             format: date-time
-        - name: due_at_max
+        - name: due_on_max
           in: query
           description: 支払期日の最大値。YYYY-MM-DD形式。例 2024-01-01
           required: false
