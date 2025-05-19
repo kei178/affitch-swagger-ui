@@ -52,6 +52,20 @@ paths:
       operationId: listAffiliates
 
       parameters:
+        - name: created_at_max
+          in: query
+          description: 作成日時の最大値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: created_at_min
+          in: query
+          description: 作成日時の最小値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          required: false
+          schema:
+            type: string
+            format: date-time
         - name: statuses
           in: query
           description: ステータス
@@ -222,6 +236,26 @@ paths:
       operationId: listAffiliateDiscountCodes
 
       parameters:
+        - name: affiliate_id
+          in: query
+          description: アフィリエイト参照ID
+          required: false
+          schema:
+            type: string
+        - name: created_at_max
+          in: query
+          description: 作成日時の最大値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: created_at_min
+          in: query
+          description: 作成日時の最小値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          required: false
+          schema:
+            type: string
+            format: date-time
         - name: page
           in: query
           description: ページ番号
@@ -391,6 +425,26 @@ paths:
       operationId: listConversions
 
       parameters:
+        - name: affiliate_id
+          in: query
+          description: アフィリエイト参照ID
+          required: false
+          schema:
+            type: string
+        - name: created_at_max
+          in: query
+          description: 作成日時の最大値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: created_at_min
+          in: query
+          description: 作成日時の最小値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          required: false
+          schema:
+            type: string
+            format: date-time
         - name: statuses
           in: query
           description: ステータス
@@ -577,6 +631,34 @@ paths:
       operationId: listPayouts
 
       parameters:
+        - name: created_at_max
+          in: query
+          description: 作成日時の最大値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: created_at_min
+          in: query
+          description: 作成日時の最小値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: due_at_max
+          in: query
+          description: 支払期日の最大値（YYYY-MM-DD形式、例: 2024-01-01）
+          required: false
+          schema:
+            type: string
+            format: date
+        - name: due_on_min
+          in: query
+          description: 支払期日の最小値（YYYY-MM-DD形式、例: 2024-01-01）
+          required: false
+          schema:
+            type: string
+            format: date-time
         - name: statuses
           in: query
           description: ステータス
