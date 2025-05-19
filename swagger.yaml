@@ -54,14 +54,14 @@ paths:
       parameters:
         - name: created_at_max
           in: query
-          description: 作成日時の最大値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          description: 作成日時の最大値。ISO 8601形式。例 2024-01-01T00:00:00Z
           required: false
           schema:
             type: string
             format: date-time
         - name: created_at_min
           in: query
-          description: 作成日時の最小値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          description: 作成日時の最小値。ISO 8601形式。例 2024-01-01T00:00:00Z
           required: false
           schema:
             type: string
@@ -244,14 +244,14 @@ paths:
             type: string
         - name: created_at_max
           in: query
-          description: 作成日時の最大値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          description: 作成日時の最大値。ISO 8601形式。例 2024-01-01T00:00:00Z
           required: false
           schema:
             type: string
             format: date-time
         - name: created_at_min
           in: query
-          description: 作成日時の最小値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          description: 作成日時の最小値。ISO 8601形式。例 2024-01-01T00:00:00Z
           required: false
           schema:
             type: string
@@ -433,14 +433,14 @@ paths:
             type: string
         - name: created_at_max
           in: query
-          description: 作成日時の最大値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          description: 作成日時の最大値。ISO 8601形式。例 2024-01-01T00:00:00Z
           required: false
           schema:
             type: string
             format: date-time
         - name: created_at_min
           in: query
-          description: 作成日時の最小値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          description: 作成日時の最小値。ISO 8601形式。例 2024-01-01T00:00:00Z
           required: false
           schema:
             type: string
@@ -633,28 +633,28 @@ paths:
       parameters:
         - name: created_at_max
           in: query
-          description: 作成日時の最大値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          description: 作成日時の最大値。ISO 8601形式。例 2024-01-01T00:00:00Z
           required: false
           schema:
             type: string
             format: date-time
         - name: created_at_min
           in: query
-          description: 作成日時の最小値（ISO 8601形式、例: 2024-01-01T00:00:00Z）
+          description: 作成日時の最小値。ISO 8601形式。例 2024-01-01T00:00:00Z
           required: false
           schema:
             type: string
             format: date-time
         - name: due_at_max
           in: query
-          description: 支払期日の最大値（YYYY-MM-DD形式、例: 2024-01-01）
+          description: 支払期日の最大値。YYYY-MM-DD形式。例 2024-01-01
           required: false
           schema:
             type: string
             format: date
         - name: due_on_min
           in: query
-          description: 支払期日の最小値（YYYY-MM-DD形式、例: 2024-01-01）
+          description: 支払期日の最小値。YYYY-MM-DD形式。例 2024-01-01
           required: false
           schema:
             type: string
