@@ -184,7 +184,7 @@ paths:
                   properties:
                     commission_rate:
                       type: number
-                      description: 個別報酬レート(%)
+                      description: 個別報酬レート
                       example: 10.0
                     use_default_recurring_commission_rate:
                       type: boolean
@@ -192,7 +192,7 @@ paths:
                       example: true
                     recurring_commission_rate:
                       type: number
-                      description: 継続コンバージョン個別報酬レート(%)
+                      description: 継続コンバージョン個別報酬レート
                       example: 10.0
                     recurring_conversion_allowed:
                       type: string
@@ -812,11 +812,11 @@ components:
           example: GQKCY6Z6CDCZ
         commission_rate:
           type: number
-          description: 報酬レート(%)
+          description: 報酬レート
           example: 10.0
         recurring_commission_rate:
           type: number
-          description: 継続コンバージョン報酬レート(%)
+          description: 継続コンバージョン報酬レート
           example: 10.0
         use_default_recurring_commission_rate:
           type: boolean
@@ -919,8 +919,15 @@ components:
           description: 報酬金額
           type: number
           example: 1000
+        commission_type:
+          description: 報酬タイプ
+          type: string
+          enum:
+            - PERCENTAGE
+            - FIXED_AMOUNT
+          example: PERCENTAGE
         commission_rate:
-          description: 報酬レート(%)
+          description: 報酬レート
           type: number
           example: 10.0
         comment:
