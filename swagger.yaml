@@ -942,6 +942,11 @@ components:
           description: Shopify 注文ID
           type: number
           example: 5916298510497
+        click_created_at:
+          description: クリック発生日時（種別がCLICKの場合のみ）
+          type: string
+          example: 2024-01-01T00:00:00Z
+          nullable: true
         created_at:
           description: 作成日時
           type: string
@@ -1081,6 +1086,10 @@ components:
           type: string
           description: 口座名義
           example: 日本 太郎
+        managed:
+          type: boolean
+          description: 自社管理アフィリエイトかどうか
+          example: true
 
   securitySchemes:
     api_key:
