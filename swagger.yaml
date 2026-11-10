@@ -30,7 +30,7 @@ tags:
   - name: Affiliate
     description: アフィリエイトのAPI
   - name: AffiliateDiscountCode
-    description: アフィリエイトクーポンコードのAPI
+    description: アフィリエイトクーポンコードのAPI（クーポンコードでのコンバージョン計測）
   - name: AffiliateCustomerTag
     description: アフィリエイト顧客タグのAPI（顧客タグでのコンバージョン計測）
   - name: Conversion
