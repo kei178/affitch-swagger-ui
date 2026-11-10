@@ -31,6 +31,8 @@ tags:
     description: アフィリエイトのAPI
   - name: AffiliateDiscountCode
     description: アフィリエイトクーポンコードのAPI
+  - name: AffiliateCustomerTag
+    description: アフィリエイト顧客タグのAPI（顧客タグでのコンバージョン計測）
   - name: Conversion
     description: コンバージョンのAPI
   - name: Payout
@@ -411,6 +413,205 @@ paths:
           description: Record not found
         "422":
           description: Default code cannot be deleted
+
+  "/affiliate_customer_tags":
+    get:
+      tags:
+        - AffiliateCustomerTag
+
+      summary: アフィリエイト顧客タグ一覧
+
+      description: |
+        アフィリエイト顧客タグの一覧を取得します。削除済みのタグは含まれません。
+
+      operationId: listAffiliateCustomerTags
+
+      parameters:
+        - name: affiliate_id
+          in: query
+          description: アフィリエイト参照ID
+          required: false
+          schema:
+            type: string
+        - name: created_at_max
+          in: query
+          description: 作成日時の最大値。ISO 8601形式。例 2024-01-01T00:00:00Z
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: created_at_min
+          in: query
+          description: 作成日時の最小値。ISO 8601形式。例 2024-01-01T00:00:00Z
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: page
+          in: query
+          description: ページ番号
+          required: false
+          schema:
+            type: number
+            default: 1
+        - name: page_size
+          in: query
+          description: 1ページあたりの件数
+          required: false
+          schema:
+            type: number
+            default: 20
+            maximum: 100
+
+      security:
+        - api_key: []
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliate_customer_tags:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AffiliateCustomerTag"
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        $ref: "#/components/schemas/Pagination"
+
+  "/affiliate_customer_tags/upsert":
+    put:
+      tags:
+        - AffiliateCustomerTag
+
+      summary: アフィリエイト顧客タグ登録・更新
+
+      description: |
+        アフィリエイトの顧客タグを登録します。アフィリエイトに登録できる顧客タグは1件です。
+
+        - 同じタグが登録済みの場合は何も変更せず、登録済みのタグを返します。
+        - 別のタグが登録済みの場合は、登録済みのタグを削除して新しいタグを登録します。
+        - `tag` は必須です。空の場合はエラーになります。タグの削除は `DELETE /affiliate_customer_tags/{id}` で行ってください。
+        - 他のアフィリエイトに登録済みのタグは登録できません。
+
+        タグの照合は完全一致（大文字・小文字と前後の空白を区別しない）です。
+
+      operationId: upsertAffiliateCustomerTag
+
+      security:
+        - api_key: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                affiliate_customer_tag:
+                  type: object
+                  required:
+                    - affiliate_id
+                    - tag
+                  properties:
+                    affiliate_id:
+                      type: string
+                      description: アフィリエイト参照ID
+                      example: 01HRB7TCSJNCGZKDCGY1G2R2JP
+                    tag:
+                      type: string
+                      description: 顧客タグ（Shopifyの顧客に付与するタグ）
+                      example: staff:0001
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliate_customer_tag:
+                    $ref: "#/components/schemas/AffiliateCustomerTag"
+        "403":
+          description: Forbidden
+        "404":
+          description: Record not found
+        "422":
+          description: Tag is already registered to another affiliate / Tag can't be blank
+
+  "/affiliate_customer_tags/{id}":
+    get:
+      tags:
+        - AffiliateCustomerTag
+
+      summary: アフィリエイト顧客タグ詳細
+
+      description: |
+        アフィリエイト顧客タグ1件のデータを取得します。
+
+      operationId: getAffiliateCustomerTag
+
+      parameters:
+        - name: id
+          in: path
+          description: 参照ID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliate_customer_tag:
+                    $ref: "#/components/schemas/AffiliateCustomerTag"
+        "403":
+          description: Forbidden
+        "404":
+          description: Record not found
+
+    delete:
+      tags:
+        - AffiliateCustomerTag
+
+      summary: アフィリエイト顧客タグ削除
+
+      description: |
+        アフィリエイト顧客タグを削除します。削除後の注文はこのタグでは計測されません。過去のコンバージョンは変わりません。
+
+      operationId: deleteAffiliateCustomerTag
+
+      parameters:
+        - name: id
+          in: path
+          description: 参照ID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+
+      responses:
+        "204":
+          description: No Content
+        "403":
+          description: Forbidden
+        "404":
+          description: Record not found
 
   "/conversions":
     get:
@@ -888,6 +1089,30 @@ components:
           description: アフィリエイト参照ID
           type: string
           example: 01HRB7TCSJNCGZKDCGY1G2R2JP
+    AffiliateCustomerTag:
+      type: object
+      properties:
+        id:
+          description: 参照ID
+          type: string
+          example: 01HRB68JC8185BJ6MPQMM71H9C
+        tag:
+          description: 顧客タグ
+          type: string
+          example: staff:0001
+        match_type:
+          description: 照合方法
+          type: string
+          enum:
+            - exact_match
+        created_at:
+          description: 作成日時
+          type: string
+          example: 2024-01-01T00:00:00Z
+        affiliate_id:
+          description: アフィリエイト参照ID
+          type: string
+          example: 01HRB7TCSJNCGZKDCGY1G2R2JP
     Conversion:
       type: object
       properties:
@@ -901,6 +1126,7 @@ components:
           enum:
             - CLICK
             - DISCOUNT_CODE
+            - CUSTOMER_TAG
             - RECURRING
           example: CLICK
         status:
