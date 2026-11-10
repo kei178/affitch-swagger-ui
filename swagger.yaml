@@ -422,7 +422,7 @@ paths:
       summary: アフィリエイト顧客タグ一覧
 
       description: |
-        アフィリエイト顧客タグの一覧を取得します。削除済みのタグは含まれません。
+        アフィリエイト顧客タグの一覧を取得します。削除済みのタグは含まれません。1つのアフィリエイトに複数の顧客タグが登録されている場合は、タグごとに1件返します。
 
       operationId: listAffiliateCustomerTags
 
@@ -484,24 +484,21 @@ paths:
                       pagination:
                         $ref: "#/components/schemas/Pagination"
 
-  "/affiliate_customer_tags/upsert":
-    put:
+    post:
       tags:
         - AffiliateCustomerTag
 
-      summary: アフィリエイト顧客タグ登録・更新
+      summary: アフィリエイト顧客タグ作成
 
       description: |
-        アフィリエイトの顧客タグを登録します。アフィリエイトに登録できる顧客タグは1件です。
+        アフィリエイトに顧客タグを追加で登録します。1つのアフィリエイトに複数の顧客タグを登録できます（上限50件）。
 
-        - 同じタグが登録済みの場合は何も変更せず、登録済みのタグを返します。
-        - 別のタグが登録済みの場合は、登録済みのタグを削除して新しいタグを登録します。
-        - `tag` は必須です。空の場合はエラーになります。タグの削除は `DELETE /affiliate_customer_tags/{id}` で行ってください。
-        - 他のアフィリエイトに登録済みのタグは登録できません。
+        - すでに登録済みの顧客タグ（同じアフィリエイト・他のアフィリエイトを問わず）は登録できません。
+        - 登録済みの顧客タグを別のタグに変更する場合は `POST /affiliate_customer_tags/{id}/replace` を使用してください。
 
         タグの照合は完全一致（大文字・小文字と前後の空白を区別しない）です。
 
-      operationId: upsertAffiliateCustomerTag
+      operationId: createAffiliateCustomerTag
 
       security:
         - api_key: []
@@ -543,7 +540,7 @@ paths:
         "404":
           description: Record not found
         "422":
-          description: Tag is already registered to another affiliate / Tag can't be blank
+          description: Tag is already registered / Tag can't be blank / An affiliate can have at most 50 customer tags
 
   "/affiliate_customer_tags/{id}":
     get:
@@ -612,6 +609,69 @@ paths:
           description: Forbidden
         "404":
           description: Record not found
+
+  "/affiliate_customer_tags/{id}/replace":
+    post:
+      tags:
+        - AffiliateCustomerTag
+
+      summary: アフィリエイト顧客タグ置換
+
+      description: |
+        参照IDで指定した顧客タグを新しい顧客タグに置き換えます。
+
+        - 顧客タグは作成後に変更できないため、指定した顧客タグを削除し、同じアフィリエイトに新しい顧客タグを登録します。レスポンスは**新しい参照IDを持つ顧客タグ**です。
+        - 同じタグを指定した場合は何も変更せず、指定した顧客タグをそのまま返します。
+        - `tag` は必須です。空の場合はエラーになります。削除は `DELETE /affiliate_customer_tags/{id}` で行ってください。
+        - 登録済みの顧客タグ（同じアフィリエイト・他のアフィリエイトを問わず）には置き換えできません。
+        - 置き換え後は元の参照IDが削除済みになるため、同じリクエストを再送すると 404 になります。
+
+      operationId: replaceAffiliateCustomerTag
+
+      parameters:
+        - name: id
+          in: path
+          description: 参照ID
+          required: true
+          schema:
+            type: string
+
+      security:
+        - api_key: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                affiliate_customer_tag:
+                  type: object
+                  required:
+                    - tag
+                  properties:
+                    tag:
+                      type: string
+                      description: 新しい顧客タグ
+                      example: staff:0002
+
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  affiliate_customer_tag:
+                    $ref: "#/components/schemas/AffiliateCustomerTag"
+        "403":
+          description: Forbidden
+        "404":
+          description: Record not found
+        "422":
+          description: Tag is already registered / Tag can't be blank
 
   "/conversions":
     get:
